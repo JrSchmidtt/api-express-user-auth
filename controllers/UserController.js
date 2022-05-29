@@ -1,18 +1,21 @@
 const res = require("express/lib/response");
+const User = require('../models/User')
 
 class UserController{
     async create(req, res){
         var { email, name, password, role } = req.body;
-        var emailcheck = /\S+@\S+\.\S+/;
+        var isEmail = /\S+@\S+\.\S+/;
 
-        console.log('email:'+email)
-        console.log('name:'+name)
-        console.log('cargo:'+role)
-        console.log('senha:'+password)
-
-        if(!emailcheck.test(email)){
+        if(!isEmail.test(email)){
             res.status(403)
             return res.json({err: 'email is invalid'})
+        }
+
+        var emailsIsDuplicate = await User.findEmail(email);
+
+        if(emailsIsDuplicate){
+            res.status(406)
+            return res.json({err: 'email is duplicated'})
         }
 
         if(name == undefined || name.length < 3 ){
@@ -30,6 +33,8 @@ class UserController{
             return res.json({err: 'role is invalid'})
         }
 
+        await User.new(email, password, name, role)
+        
         res.status(200)
         res.send('Ok')
     }

@@ -1,4 +1,5 @@
 const User = require('../service/User')
+const PasswordToken = require('../service/PasswordToken')
 const res = require("express/lib/response");
 const req = require("express/lib/request");
 
@@ -57,6 +58,7 @@ class UserController{
             res.json(user);
         }
     }
+
     async editUser(req, res){
         var id = req.params.id;
         var email = req.body.email;
@@ -65,7 +67,6 @@ class UserController{
         var { email, name, role } = req.body;
         console.log(name)
         var result = await User.update(id, email, name, role)
-        //console.log(result)
         if(result != undefined){
             if(result.status){
                 res.status(200)
@@ -86,6 +87,19 @@ class UserController{
         if(result.status){
             res.send(200);
             res.send(`User ${id} has been deleted`);
+        }else{
+            res.status(406);
+            res.send(result.err);
+        }
+    }
+
+    async recoverPassword(req, res){
+        var email = req.body.email;
+        var result = await PasswordToken.create(email);
+        if (result.status){
+            res.send(200);
+            res.send('User ' + result.token + ' has been deleted');
+            //NodeMailer.send(result.token)         To Do: enviar email com o nodeMailer
         }else{
             res.status(406);
             res.send(result.err);

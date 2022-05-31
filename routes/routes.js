@@ -5,11 +5,11 @@ var HomeController = require('../controllers/HomeController');
 var UserController = require('../controllers/UserController');
 
 router.get('/', HomeController.index);
-
 router.post('/user', UserController.create);
 router.get('/user', UserController.index);
 router.get('/user/:id', UserController.findUser);
 router.delete('/user/:id', UserController.remove);
 router.put('/user/:id', UserController.editUser);
+router.post('/recoverPassword/', UserController.recoverPassword);
 
 module.exports = router;

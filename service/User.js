@@ -48,6 +48,21 @@ class User{
             return undefined;
         }
     }
+    async findByEmail(email){
+        try{
+            var result = await database.select(["id","email","role","name"]).where({email:email}).table("api_users");
+            var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+            if(resultArray.length > 0){
+                return resultArray[0];
+            }else{
+                return undefined;
+            }
+
+        }catch(err){
+            console.log(err);
+            return undefined;
+        }
+    }
     async update(id, email, name, role){
 
         var user = await this.findById(id);

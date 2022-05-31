@@ -1,5 +1,7 @@
-const res = require("express/lib/response");
 const User = require('../service/User')
+const res = require("express/lib/response");
+const req = require("express/lib/request");
+
 
 class UserController{
     async index(req, res){
@@ -53,6 +55,40 @@ class UserController{
         }else{
             res.status(200);
             res.json(user);
+        }
+    }
+    async editUser(req, res){
+        var id = req.params.id;
+        var email = req.body.email;
+        var name = req.body.name;
+        console.log(email)
+        var { email, name, role } = req.body;
+        console.log(name)
+        var result = await User.update(id, email, name, role)
+        //console.log(result)
+        if(result != undefined){
+            if(result.status){
+                res.status(200)
+                res.send('Tudo Ok');
+            }else{
+                res.status(406)
+                res.send(result.err);
+            }
+        }else{
+            res.status(406)
+            res.send('err');
+        }
+    }
+
+    async remove(req,res){
+        var id = req.params.id;
+        var result= await User.delete(id);
+        if(result.status){
+            res.send(200);
+            res.send(`User ${id} has been deleted`);
+        }else{
+            res.status(406);
+            res.send(result.err);
         }
     }
 }

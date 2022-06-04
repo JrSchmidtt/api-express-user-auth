@@ -2,6 +2,7 @@ const User = require('../service/User')
 const PasswordToken = require('../service/PasswordToken')
 const res = require("express/lib/response");
 const req = require("express/lib/request");
+const database = require('../database/connection');
 
 
 class UserController{
@@ -97,13 +98,16 @@ class UserController{
         var email = req.body.email;
         var result = await PasswordToken.create(email);
         if (result.status){
-            res.send(200);
-            res.send('User ' + result.token + ' has been deleted');
+            res.status(200);
+            res.send(`Token:${result.token}`);
             //NodeMailer.send(result.token)         To Do: enviar email com o nodeMailer
         }else{
             res.status(406);
             res.send(result.err);
         }
+    }
+    async validate(token){
+        await database.select()
     }
 }
 

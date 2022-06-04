@@ -1,5 +1,6 @@
 var database = require('../database/connection');
 var bcrypt = require('bcrypt');
+const PasswordToken = require('./PasswordToken');
 
 class User{
     async new(email, password, name, role){
@@ -117,6 +118,7 @@ class User{
     async changePassword(newPassword, id, token){
         var hash = await bcrypt.hash(newPassword,2);
         await database.where({id: id}).update({password:hash}).table('api_users');
+        await PasswordToken.setUsed(token);
     }
 }
 

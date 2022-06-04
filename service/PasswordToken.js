@@ -41,6 +41,9 @@ class PasswordToken {
             return {status:false}
         }
     }
+    async setUsed(token){
+        await database.update({used:1}).where({token: token}).table("passwordtokens")
+    }
 }
 
 module.exports = new PasswordToken();

@@ -51,7 +51,7 @@ class User{
     }
     async findByEmail(email){
         try{
-            var result = await database.select(["id","email","role","name"]).where({email:email}).table("api_users");
+            var result = await database.select(["id","email","password","role","name"]).where({email:email}).table("api_users");
             var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
             if(resultArray.length > 0){
                 return resultArray[0];

@@ -1,9 +1,11 @@
 const User = require('../service/User')
 const PasswordToken = require('../service/PasswordToken')
+var bcrypt = require('bcrypt');
 const res = require("express/lib/response");
 const req = require("express/lib/request");
-const database = require('../database/connection');
+var jwt = require('jsonwebtoken');
 
+var secret = 'R0vwcPYIoAIOCBozuYuQOf85dZ7'
 
 class UserController{
     async index(req, res){
@@ -45,7 +47,7 @@ class UserController{
         await User.new(email, password, name, role);
 
         res.status(200);
-        res.send('Ok');
+        return res.json({status:'200',desc:'User has been created',user: name,email:email});
     }
 
     async findUser(req, res){
@@ -117,6 +119,22 @@ class UserController{
             res.status(406)
             res.send('Token Invalid');
         }
+    }
+    async login(req, res){
+        var {email, password} = req.body;
+        var user = await User.findByEmail(email);
+        if (user != undefined){
+            var check = await bcrypt.compare(password,user.password)
+            if(check){
+                var token = jwt.sign({email: user.email, role: user.role},secret);
+                res.status(200)
+                res.json({token: token});
+            }else{
+                res.send('Password Invalid');
+            }
+        }else{
+            res.json({status: false})
+        }  
     }
 }
 

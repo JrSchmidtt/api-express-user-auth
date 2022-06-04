@@ -1,18 +1,19 @@
 var database = require('../database/connection');
 const { findById } = require('../service/User');
 const User = require('../service/User')
+const crypto = require('crypto');
 
 class PasswordToken {
     async create(email){
         var user = await User.findByEmail(email);
         if(user != undefined){
             try{
-                var token = Date.now() // To do: UUID
+                var token = crypto.randomUUID()
                 await database.insert({
                     user_id: user.id,
                     used: 0,
                     token: token
-                }).table('passwordTokens')
+                }).table('passwordtokens')
                 return {status: true, token: token}
             }catch(err){
                 console.log(err)

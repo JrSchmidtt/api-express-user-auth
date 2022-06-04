@@ -114,6 +114,10 @@ class User{
             return{status: false,err:'Error'}
         }
     }
+    async changePassword(newPassword, id, token){
+        var hash = await bcrypt.hash(newPassword,2);
+        await database.where({id: id}).update({password:hash}).table('api_users');
+    }
 }
 
 module.exports = new User();

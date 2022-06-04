@@ -1,4 +1,5 @@
 var express = require('express')
+var bodyParser = require('body-parser')
 var app = express();
 var router = express.Router();
 var HomeController = require('../controllers/HomeController');
@@ -11,5 +12,6 @@ router.get('/user/:id', UserController.findUser);
 router.delete('/user/:id', UserController.remove);
 router.put('/user/:id', UserController.editUser);
 router.post('/recoverPassword/', UserController.recoverPassword);
+router.post('/changePassword/', UserController.changePassword);
 
 module.exports = router;

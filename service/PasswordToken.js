@@ -23,6 +23,24 @@ class PasswordToken {
             return{status:false,err:'Email not found'}
         }
     }
+    async validate(token){
+        try{
+            var result = await database.select().where({token: token}).table("passwordtokens");
+            if(result != undefined){
+                var tokenFound = result[0].token;
+                if(tokenFound){
+                    return {status: true, token: result[0].token, id:result[0].id};
+                }else{
+                    return {status: false};
+                }
+            }else{
+                return {status:false,err:'Token invalid'}
+            }
+        }catch(err){
+            console.log(err)
+            return {status:false}
+        }
+    }
 }
 
 module.exports = new PasswordToken();

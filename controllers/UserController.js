@@ -93,7 +93,6 @@ class UserController{
             res.send(result.err);
         }
     }
-
     async recoverPassword(req, res){
         var email = req.body.email;
         var result = await PasswordToken.create(email);
@@ -106,8 +105,18 @@ class UserController{
             res.send(result.err);
         }
     }
-    async validate(token){
-        await database.select()
+    async changePassword(req, res){
+        var token = req.body.token;
+        var newPassword = req.body.password;
+        var isTokenValid = await PasswordToken.validate(token);
+        if(isTokenValid.status){
+           await User.changePassword(newPassword,isTokenValid.id,isTokenValid.token)
+           res.status(200)
+           res.send('Password updated');
+        }else{
+            res.status(406)
+            res.send('Token Invalid');
+        }
     }
 }
 

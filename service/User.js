@@ -58,7 +58,6 @@ class User{
             }else{
                 return undefined;
             }
-
         }catch(err){
             console.log(err);
             return undefined;
@@ -69,9 +68,7 @@ class User{
         var user = await this.findById(id);
         console.log(user)
         if(user != undefined){
-
             var editUser = {};
-
             if(email != undefined){ 
                 if(email != user.email){
                    var result = await this.findEmail(email);

@@ -1,7 +1,7 @@
 ## **Api User Auth**
 
 * Code developed for academic purposes.
-* Some operations to demonstrate the usage of KnexJs.
+* User management CRUD API with express.
 
 ## Install and Run
 1. Clone the repository : `git clone https://github.com/JrSchmidtt/api-express-user-auth`

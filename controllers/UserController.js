@@ -88,8 +88,8 @@ class UserController{
         var id = req.params.id;
         var result= await User.delete(id);
         if(result.status){
-            res.send(200);
-            res.send(`User ${id} has been deleted`);
+            res.status(200);
+            return res.json({status:'200',user: id,desc:'User has been deleted'});
         }else{
             res.status(406);
             res.send(result.err);
@@ -100,7 +100,7 @@ class UserController{
         var result = await PasswordToken.create(email);
         if (result.status){
             res.status(200);
-            res.send(`Token:${result.token}`);
+            return res.json({status:'200',desc:'Token has been created',token: result.token});
             //NodeMailer.send(result.token)         To Do: enviar email com o nodeMailer
         }else{
             res.status(406);
@@ -114,7 +114,7 @@ class UserController{
         if(isTokenValid.status){
            await User.changePassword(newPassword,isTokenValid.id,isTokenValid.token)
            res.status(200)
-           res.send('Password updated');
+           return res.json({status:'200',desc:'Password updated'});
         }else{
             res.status(406)
             res.send('Token Invalid');
